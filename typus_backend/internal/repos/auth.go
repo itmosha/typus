@@ -48,7 +48,7 @@ func (r *AuthRepo) CreateInstance(userReceived *models.User) (userReturned *mode
 			switch pqErr.Code.Name() {
 			case "unique_violation":
 				if pqErr.Constraint == "users_username_key" {
-					err = errors.ErrNonUniqueEmail
+					err = errors.ErrNonUniqueUsername
 					return nil, err
 				} else if pqErr.Constraint == "users_email_key" {
 					err = errors.ErrNonUniqueEmail
