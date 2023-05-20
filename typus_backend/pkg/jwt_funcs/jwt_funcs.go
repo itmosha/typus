@@ -132,7 +132,7 @@ func ExtractAccessTokenClaims(at string) (claims *AccessTokenClaims, isExpired b
 	return
 }
 
-// Extract the expity from access token and return the claims.
+// Extract the expiry from access token and return the claims.
 func ExtractRefreshTokenClaims(rt string) (claims *RefreshTokenClaims, isExpired bool, err error) {
 
 	// Get secret key from .env
@@ -171,24 +171,14 @@ func ExtractRefreshTokenClaims(rt string) (claims *RefreshTokenClaims, isExpired
 	return
 }
 
-// Validate a token pair and check for expiry
-func ValidateTokenPair(tp *TokenPair) (err error) {
+// Validate access token and check for expiry
+func ValidateAccessToken(at string) (err error) {
 
-	// Check the access token
-	_, isExpired, err := ExtractAccessTokenClaims(tp.AccessToken)
+	_, isExpired, err := ExtractAccessTokenClaims(at)
 	if err != nil {
 		return
 	} else if isExpired {
 		err = errors.ErrAccessTokenExpired
-		return
-	}
-
-	// Check the refresh token
-	_, isExpired, err = ExtractRefreshTokenClaims(tp.RefreshToken)
-	if err != nil {
-		return
-	} else if isExpired {
-		err = errors.ErrRefreshTokenExpired
 	}
 	return
 }
