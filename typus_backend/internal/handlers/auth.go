@@ -33,7 +33,7 @@ func (h *AuthHandler) Routes(g *gin.RouterGroup) {
 	g.OPTIONS("/login/", handleOptions)
 }
 
-// Handler for the /api/auth/register/ API endpoint.
+// Handler for the /api/auth/register/ POST API endpoint.
 func (h *AuthHandler) handleRegister(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "POST")
@@ -107,7 +107,7 @@ func (h *AuthHandler) handleRegister(ctx *gin.Context) {
 	})
 }
 
-// Handler for the /api/auth/login/ API endpoint.
+// Handler for the /api/auth/login/ POST API endpoint.
 func (h *AuthHandler) handleLogin(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "POST")

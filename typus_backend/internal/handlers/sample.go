@@ -1,11 +1,11 @@
 package handlers
 
 import (
+	"backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/usecases"
 	"backend/pkg/headers"
 	"backend/pkg/jwt_funcs"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -13,16 +13,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Default representation of the sample repository.
+// Contains the store in order to query the database.
 type SampleHandler struct {
 	UseCase *usecases.SampleUsecase
 }
 
+// Create a new SampleHandler.
 func NewSampleHandler() *SampleHandler {
 	return &SampleHandler{
 		UseCase: usecases.NewSampleUsecase(),
 	}
 }
 
+// Add all the auth API endpoints.
 func (h *SampleHandler) Routes(g *gin.RouterGroup) {
 	g.GET("", h.handleSamplesList)
 	g.GET("/:sampleId", h.handleGetSample)
@@ -32,6 +36,7 @@ func (h *SampleHandler) Routes(g *gin.RouterGroup) {
 	g.OPTIONS("/:sampleId", handleOptions)
 }
 
+// Handler for the /api/samples API GET endpoint.
 func (h *SampleHandler) handleSamplesList(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "GET")
@@ -42,8 +47,8 @@ func (h *SampleHandler) handleSamplesList(ctx *gin.Context) {
 	samples, err := h.UseCase.GetAllSamples()
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"Error": err.Error(),
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"Error": "Server error",
 		})
 		return
 	}
@@ -51,6 +56,7 @@ func (h *SampleHandler) handleSamplesList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, samples)
 }
 
+// Handler for the /api/samples/:sampleId GET API endpoint.
 func (h *SampleHandler) handleGetSample(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "GET")
@@ -62,8 +68,8 @@ func (h *SampleHandler) handleGetSample(ctx *gin.Context) {
 	sampleId, err := strconv.Atoi(sampleIdString)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"Error": fmt.Sprintf("Invalid sample ID: %s", sampleIdString),
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"Error": err.Error(),
 		})
 		return
 	}
@@ -71,21 +77,33 @@ func (h *SampleHandler) handleGetSample(ctx *gin.Context) {
 	sample, err := h.UseCase.GetSampleById(sampleId)
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"Error": err.Error(),
-		})
-		return
+		switch err {
+		case errors.ErrNoSampleWithId:
+			{
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"Error": "No sample with such id",
+				})
+				return
+			}
+		default:
+			{
+				ctx.JSON(http.StatusBadRequest, gin.H{
+					"Error": "Server error",
+				})
+				return
+			}
+		}
 	}
 
 	ctx.JSON(http.StatusOK, sample)
 }
 
+// Handler for the /api/samples/ POST API endpoint.
 func (h *SampleHandler) handleCreateSample(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "POST")
 
 	// Access level: 2 (moderator)
-
 	// Validate JWT
 
 	headerToken := ctx.Request.Header["Authorization"]
@@ -116,7 +134,7 @@ func (h *SampleHandler) handleCreateSample(ctx *gin.Context) {
 	claims, err := jwt_funcs.ValidateJWT(token)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Error": err.Error(),
+			"Error": "Invalid JWT provided",
 		})
 		return
 	}
@@ -172,7 +190,7 @@ func (h *SampleHandler) handleCreateSample(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"Error": err.Error(),
+			"Error": "Server error",
 		})
 		return
 	}
