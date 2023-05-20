@@ -2,13 +2,12 @@ package handlers
 
 import (
 	"backend/internal/errors"
+	"backend/internal/middleware"
 	"backend/internal/models"
 	"backend/internal/usecases"
 	"backend/pkg/headers"
-	"backend/pkg/jwt_funcs"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,13 +29,14 @@ func NewSampleHandler() *SampleHandler {
 func (h *SampleHandler) Routes(g *gin.RouterGroup) {
 	g.GET("", h.handleSamplesList)
 	g.GET("/:sampleId", h.handleGetSample)
-	g.POST("", h.handleCreateSample)
+	g.POST("", middleware.IsAuth(), middleware.IsModerator(), h.handleCreateSample)
 
 	g.OPTIONS("", handleOptions)
 	g.OPTIONS("/:sampleId", handleOptions)
 }
 
 // Handler for the /api/samples API GET endpoint.
+// GUEST (0) access level.
 func (h *SampleHandler) handleSamplesList(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "GET")
@@ -57,6 +57,7 @@ func (h *SampleHandler) handleSamplesList(ctx *gin.Context) {
 }
 
 // Handler for the /api/samples/:sampleId GET API endpoint.
+// GUEST (0) access level.
 func (h *SampleHandler) handleGetSample(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "GET")
@@ -99,54 +100,10 @@ func (h *SampleHandler) handleGetSample(ctx *gin.Context) {
 }
 
 // Handler for the /api/samples/ POST API endpoint.
+// MODERATOR (2) access level
 func (h *SampleHandler) handleCreateSample(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "POST")
-
-	// Access level: 2 (moderator)
-	// Validate JWT
-
-	headerToken := ctx.Request.Header["Authorization"]
-	if headerToken == nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Error": "No JWT provided",
-		})
-		return
-	}
-
-	if len(headerToken) < 1 {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Error": "Invalid JWT provided",
-		})
-		return
-	}
-
-	splitToken := strings.Split(headerToken[0], "Token ")
-	if len(splitToken) < 2 {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Error": "Invalid JWT provided",
-		})
-		return
-	}
-
-	token := splitToken[1]
-
-	claims, err := jwt_funcs.ValidateJWT(token)
-	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Error": "Invalid JWT provided",
-		})
-		return
-	}
-
-	//  Check for permission
-
-	if claims.Role < 2 {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"Error": "No permission to perform this operation",
-		})
-		return
-	}
 
 	var regBody models.CreateSampleBody
 
@@ -186,7 +143,7 @@ func (h *SampleHandler) handleCreateSample(ctx *gin.Context) {
 		Language: regBody.Language,
 	}
 
-	sample, err = h.UseCase.CreateSample(sample)
+	sample, err := h.UseCase.CreateSample(sample)
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

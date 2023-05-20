@@ -139,7 +139,7 @@ func (h *AuthHandler) handleLogin(ctx *gin.Context) {
 
 	// Call the usecase
 
-	token, err := h.UseCase.LoginUser(logBody)
+	tokenPair, err := h.UseCase.LoginUser(logBody)
 
 	if err != nil {
 		switch err {
@@ -175,9 +175,9 @@ func (h *AuthHandler) handleLogin(ctx *gin.Context) {
 		return
 	}
 
-	// Return id of the created user
+	// Return created token pair
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"token": token,
+		"token_pair": tokenPair,
 	})
 }

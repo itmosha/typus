@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"backend/internal/models"
+	"backend/pkg/jwt_funcs"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,13 +24,13 @@ func IsAdmin() gin.HandlerFunc {
 }
 
 // Check if a user has a certain role.
-func HasRole(requredRole models.ROLE) gin.HandlerFunc {
+func HasRole(requiredRole models.ROLE) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		// Get token from gin's context
 		token, _ := c.Get("token")
 
-		k := token.(*jwt_funcs.JWTClaims)
+		t, ok := token.(*jwt_funcs.AccessTokenClaims)
 		if !ok {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, map[string]string{"message": "Invalid access token provided"})
 			return

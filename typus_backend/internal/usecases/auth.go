@@ -53,7 +53,7 @@ func (u *AuthUsecase) RegisterUser(creds models.RegisterCredentials) (id int, er
 }
 
 // Usecase (inner logic) for logging users in.
-func (u *AuthUsecase) LoginUser(creds models.LoginCredentials) (token string, err error) {
+func (u *AuthUsecase) LoginUser(creds models.LoginCredentials) (tokenPair *jwt_funcs.TokenPair, err error) {
 	var user *models.User
 
 	// Determine if username or email was provided
@@ -74,7 +74,12 @@ func (u *AuthUsecase) LoginUser(creds models.LoginCredentials) (token string, er
 
 	// Compare the provided' and database's password hashes
 	if user.EncryptedPwd == creds_encrypted_pwd {
-		token, err = jwt_funcs.GenerateJWT(user.Username, user.Email, int8(user.Role))
+		claims := &jwt_funcs.AccessTokenClaims{
+			Username: user.Username,
+			Email:    user.Email,
+			Role:     user.Role,
+		}
+		tokenPair, err = jwt_funcs.GenerateTokenPair(claims)
 		if err != nil {
 			err = errors.ErrServerError
 			return
