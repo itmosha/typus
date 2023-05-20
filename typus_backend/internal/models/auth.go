@@ -1,11 +1,11 @@
 package models
 
-type role int8
+type ROLE int8
 
 // Enum that represents user roles.
 // User of each role has all access rights of users with lower role level.
 const (
-	GUEST role = iota
+	GUEST ROLE = iota
 	USER
 	MODERATOR
 	ADMIN
@@ -16,7 +16,7 @@ type User struct {
 	ID           int
 	Username     string
 	Email        string
-	Role         role
+	Role         ROLE
 	EncryptedPwd string
 }
 
