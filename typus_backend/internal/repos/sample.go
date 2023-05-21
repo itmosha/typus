@@ -69,6 +69,7 @@ func (r *SampleRepo) GetInstanceById(id int) (sample *models.Sample, err error) 
 		SELECT id, title, content, language 
 		FROM code_samples 
 		WHERE id=$1;`
+	sample = &models.Sample{}
 
 	err = r.store.DB.
 		QueryRow(query, id).

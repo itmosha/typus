@@ -12,6 +12,7 @@ type SampleUsecase struct {
 	repo *repos.SampleRepo
 }
 
+// Create a new SampleUsecase.
 func NewSampleUsecase() (uc *SampleUsecase) {
 	r, err := repos.NewSampleRepo()
 	if err != nil {
@@ -31,7 +32,6 @@ func (u *SampleUsecase) GetAllSamples() (samples []*models.Sample, err error) {
 
 // Usecase (inner logic) for getting a sample by id.
 func (u *SampleUsecase) GetSampleById(id int) (sample *models.Sample, err error) {
-
 	sample, err = u.repo.GetInstanceById(id)
 	return
 }
