@@ -37,6 +37,7 @@ func (r *AuthRepo) CreateInstance(userReceived *models.User) (userReturned *mode
 		INSERT INTO users (username, email, role, encrypted_pwd) 
 		VALUES ($1, $2, $3, $4) 
 		RETURNING id, username, email, role, encrypted_pwd;`
+	userReturned = &models.User{}
 
 	err = r.store.DB.
 		QueryRow(query, userReceived.Username, userReceived.Email, userReceived.Role, userReceived.EncryptedPwd).
@@ -49,15 +50,15 @@ func (r *AuthRepo) CreateInstance(userReceived *models.User) (userReturned *mode
 			case "unique_violation":
 				if pqErr.Constraint == "users_username_key" {
 					err = errors.ErrNonUniqueUsername
-					return nil, err
+					return
 				} else if pqErr.Constraint == "users_email_key" {
 					err = errors.ErrNonUniqueEmail
-					return nil, err
+					return
 				}
 			default:
 				{
 					err = errors.ErrServerError
-					return nil, err
+					return
 				}
 			}
 		}
