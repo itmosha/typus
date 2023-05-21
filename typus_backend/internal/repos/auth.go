@@ -36,7 +36,7 @@ func (r *AuthRepo) CreateInstance(userReceived *models.User) (userReturned *mode
 	query := `
 		INSERT INTO users (username, email, role, encrypted_pwd) 
 		VALUES ($1, $2, $3, $4) 
-		RETURNING (id, username, email, role, encrypted_pwd);`
+		RETURNING id, username, email, role, encrypted_pwd;`
 
 	err = r.store.DB.
 		QueryRow(query, userReceived.Username, userReceived.Email, userReceived.Role, userReceived.EncryptedPwd).
@@ -70,7 +70,7 @@ func (r *AuthRepo) GetInstanceByEmail(email string) (user *models.User, err erro
 
 	// Construct the query and query the database
 	query := `
-		SELECT id, username, email, role, encrypted_pwd 
+		SELECT id, username, email, role, encrypted_pwd
 		FROM users 
 		WHERE email=$1;`
 
@@ -96,7 +96,7 @@ func (r *AuthRepo) GetInstanceByUsername(username string) (user *models.User, er
 
 	// Construct the query and query the database
 	query := `
-		SELECT id, username, email, role, encrypted_pwd 
+		SELECT id, username, email, role, encrypted_pwd
 		FROM users 
 		WHERE username=$1`
 

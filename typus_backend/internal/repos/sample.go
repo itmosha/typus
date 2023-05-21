@@ -35,7 +35,7 @@ func (r *SampleRepo) GetList() (samples []*models.Sample, err error) {
 	// Construct query and query the database
 
 	query := `
-		SELECT (id, title, content, language)
+		SELECT id, title, content, language
 		FROM code_samples;`
 
 	rows, err := r.store.DB.Query(query)
@@ -46,12 +46,11 @@ func (r *SampleRepo) GetList() (samples []*models.Sample, err error) {
 	}
 	defer rows.Close()
 
-	// Handle every row separately to unnest its Content field
+	// Get every row and fill the array
 
 	for rows.Next() {
 		var sample models.Sample
 
-		// Get the sample id
 		if err = rows.Scan(&sample.ID, &sample.Title, pq.Array(&sample.Content), &sample.Language); err != nil {
 			err = errors.ErrServerError
 			return
@@ -95,7 +94,7 @@ func (r *SampleRepo) CreateInstance(sampleReceived *models.Sample) (sampleReturn
 	query := `
 		INSERT INTO code_samples (title, content, language) 
 		VALUES ($1, $2, $3) 
-		RETURNING (id, title, content, language);`
+		RETURNING id, title, content, language;`
 
 	// Get the created sample and check for errors
 	err = r.store.DB.
