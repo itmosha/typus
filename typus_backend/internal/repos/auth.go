@@ -74,6 +74,7 @@ func (r *AuthRepo) GetInstanceByEmail(email string) (user *models.User, err erro
 		SELECT id, username, email, role, encrypted_pwd
 		FROM users 
 		WHERE email=$1;`
+	user = &models.User{}
 
 	// Perform the query and get the user's data
 	err = r.store.DB.
@@ -100,6 +101,7 @@ func (r *AuthRepo) GetInstanceByUsername(username string) (user *models.User, er
 		SELECT id, username, email, role, encrypted_pwd
 		FROM users 
 		WHERE username=$1`
+	user = &models.User{}
 
 	// Perform the query and get the user's data
 	err = r.store.DB.
