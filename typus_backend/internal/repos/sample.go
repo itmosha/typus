@@ -96,6 +96,7 @@ func (r *SampleRepo) CreateInstance(sampleReceived *models.Sample) (sampleReturn
 		INSERT INTO code_samples (title, content, language) 
 		VALUES ($1, $2, $3) 
 		RETURNING id, title, content, language;`
+	sampleReturned = &models.Sample{}
 
 	// Get the created sample and check for errors
 	err = r.store.DB.
