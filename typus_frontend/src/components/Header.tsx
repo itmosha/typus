@@ -10,7 +10,7 @@ function Header(): JSX.Element {
 	const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (localStorage.getItem("token") !== null) {
+		if (localStorage.getItem("access_token") !== null) {
 			setIsLoggedIn(true);
 		} 
 	}, []);
@@ -40,7 +40,7 @@ function Header(): JSX.Element {
 				<div className='header-buttons'>
 					{ isLoggedIn ? (
 						<button
-							onClick={() => { localStorage.removeItem("token"); window.location.reload(); }}
+							onClick={() => { localStorage.removeItem("access_token"); window.location.replace(`${process.env.REACT_APP_PROTOCOL}://${process.env.REACT_APP_HOSTNAME}:3000/`); }}
 							className='header-button' 
 						>
 							<h1 className='header-button-text'>

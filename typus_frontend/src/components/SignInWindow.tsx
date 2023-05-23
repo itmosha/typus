@@ -1,4 +1,3 @@
-
 import React, { ChangeEvent, useState, useRef, useEffect } from 'react';
 import './styles/signin-window.sass'
     
@@ -9,11 +8,11 @@ interface Props {
 
 function SignInWindow(props: Props): JSX.Element {
 
-	// Fields states
+	// Field states
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
-	// Field errors states
+	// Field error states
 	const [usernameError, setUsernameError] = useState<string>("");
 	const [passwordError, setPasswordError] = useState<string>("");
 
@@ -56,8 +55,9 @@ function SignInWindow(props: Props): JSX.Element {
 
             if (response.status === 200) {
                 const responseJSON = await response.json();
-
-                localStorage.setItem("token", responseJSON.token);
+				console.log(responseJSON);
+                localStorage.setItem("access_token", responseJSON.token_pair.access_token);
+                localStorage.setItem("refresh_token", responseJSON.token_pair.refresh_token);
 				props.closeWindow(false)
 				window.location.replace(`${process.env.REACT_APP_PROTOCOL}://${process.env.REACT_APP_HOSTNAME}:3000/samples/`);
             } else {

@@ -8,7 +8,7 @@ interface Props {
 
 function RegisterWindow(props: Props): JSX.Element {
 
-	// Fields states
+	// Field states
 	const [username, setUsername] = useState<string>("");
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");

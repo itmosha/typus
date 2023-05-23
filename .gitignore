@@ -3,5 +3,6 @@
 /typus_backend/main
 /typus_backend/server
 **/*.env
+**/*.local
 **/*.exe
 **/*.vscode
