@@ -50,13 +50,35 @@ function CodeArea(props: Props): JSX.Element {
         } else if (event.key === "Enter" && cY < lnsRef.current.length - 1 && 
                     lnsRef.current[cY].chars[cX].isFiller) {
             setCsr({ x: 0, y: cY + 1 });
-        }  
+		} else if (event.key === "Tab") {
+			event.preventDefault();
+
+			// TODO: unhardcode this stuff
+			if (cX < 97) {
+				if (lnsRef.current[cY].chars[cX].c     === ' ' && !lnsRef.current[cY].chars[cX].isFiller     && 
+					lnsRef.current[cY].chars[cX + 1].c === ' ' && !lnsRef.current[cY].chars[cX + 1].isFiller &&  
+					lnsRef.current[cY].chars[cX + 2].c === ' ' && !lnsRef.current[cY].chars[cX + 2].isFiller &&  
+					lnsRef.current[cY].chars[cX + 3].c === ' ' && !lnsRef.current[cY].chars[cX + 3].isFiller) {
+				
+					lnsRef.current[cY].chars[cX].wasTyped = true;
+					lnsRef.current[cY].chars[cX + 1].wasTyped = true;
+					lnsRef.current[cY].chars[cX + 2].wasTyped = true;
+					lnsRef.current[cY].chars[cX + 3].wasTyped = true;
+					console.log(lnsRef);
+					setCsr({ x: cX + 4, y: cY });
+				}
+			}
+		}
     }
 
 
     return (
         <>
             <div className='code-area-wrapper'>
+                <div className='top-gap'>
+                    <div className='filler-line-numbers'></div>
+                    <div className='filler-code'></div>
+                </div>
                 {
                     lines?.map((line: CodeLine, lineNumber: number) => {
                         return (
