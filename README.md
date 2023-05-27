@@ -12,10 +12,11 @@ Typus is a website created for practising quick code typing. No third-party fron
 
 - [TypeScript React](https://reactjs.org/) - A library for building UIs
 - [SASS](https://sass-lang.com/) - CSS extension for powerful styling
-- [Golang](https://go.dev/) for backend (no frameworks used)
+- [Gin](https://gin-gonic.com/) - Web framework used for writing backend in Golang
 
 ## Implemented features
 
+- Fully functional authentication and authorization with JWT
 - Choosing a code sample from all samples list
 - Typing a chosen sample 
 - Creating custom samples in management page (only python code is supported for now)
@@ -23,7 +24,7 @@ Typus is a website created for practising quick code typing. No third-party fron
 ## Features coming soon
 
 - Auto tabulation after new code blocks for python
-- Tab logic
+- Syntax highlighting
 - Errors highlighting
 - Reseting the attempt
 
