@@ -23,7 +23,7 @@ interface Props {
  * 
  * @function
  */
-function useCodeSample(props: Props): FetchState<CodeLine[]> {
+function useCodeGrid(props: Props): FetchState<CodeLine[]> {
     const [state, setState] = useState<FetchState<CodeLine[]>>({ status: 'idle', data: null, error: null });
 
     useEffect(() => {
@@ -46,10 +46,15 @@ function useCodeSample(props: Props): FetchState<CodeLine[]> {
 
                     for (let i = 0; i < sample.Content.length; i++) {
                         const line: CodeLine = { chars: [] }
-                        for (let j = 0; j < sample.Content[i].length; j++) {
-                            const char: CodeCharacter = { c: sample.Content[i][j], wasTyped: false, isHighlighted: false };
-                            line.chars.push(char);
-                        }
+						for (let j = 0; j < 100; j++) {
+							if (j < sample.Content[i].length) {
+								const char: CodeCharacter = { c: sample.Content[i][j], wasTyped: false, isHighlighted: false, isFiller: false };
+								line.chars.push(char);
+							} else {
+								const char: CodeCharacter = { c: ' ', wasTyped: false, isHighlighted: false, isFiller: true };
+								line.chars.push(char);
+							}
+						}
                         lines.push(line);
                     }
                     setState({ status: 'success', data: lines, error: null })
@@ -67,4 +72,4 @@ function useCodeSample(props: Props): FetchState<CodeLine[]> {
     return state;
 }
 
-export default useCodeSample;
+export default useCodeGrid;

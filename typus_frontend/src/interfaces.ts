@@ -6,12 +6,14 @@ export interface CodeCharacter {
      * @property {boolean} wasTyped      - Represents if the character was already typed by a user. Should be false by default.
      * @property {boolean} isHighlighted - Determines if the character is highlighted. 
      *                                     This property is used for marking a character if it was typed incorrectly.
+	 * @property {boolean} isFiller      - Determines if the character is a filler character.
      * @interface
      */
 
     c: string;
     wasTyped: boolean;
     isHighlighted: boolean;
+	isFiller: boolean;
 }
 
 export interface CodeLine {

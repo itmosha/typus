@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import './styles/code-area.sass'
 import { CodeCharacter, CodeLine, Cursor } from '../interfaces';
 import isCodeSymbol from '../lib/isCodeSymbol';
-import useCodeSample from '../hooks/useCodeSample';
+import useCodeGrid from '../hooks/useCodeGrid';
 
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 
 function CodeArea(props: Props): JSX.Element {
-    const { status, data, error } = useCodeSample({ sampleId: props.sampleId });
+    const { status, data, error } = useCodeGrid({ sampleId: props.sampleId });
     const [lines, _setLines] = useState<CodeLine[]>([]);
     const [csr, _setCsr] = useState<Cursor>({ x: 0, y: 0});
 
@@ -39,17 +39,17 @@ function CodeArea(props: Props): JSX.Element {
     }, [data]);
 
     const handleKeyboard = (event: KeyboardEvent): void => {
-        if (isCodeSymbol(event.key) && csrRef.current.x < lnsRef.current[csrRef.current.y].chars.length) {
-            const currentSymbolToType = lnsRef.current[csrRef.current.y].chars[csrRef.current.x].c;
+		const [cX, cY] = [csrRef.current.x, csrRef.current.y];
+
+		if (isCodeSymbol(event.key) && cX < lnsRef.current[cY].chars.length && !lnsRef.current[cY].chars[cX].isFiller) {
+            const currentSymbolToType = lnsRef.current[cY].chars[cX].c;
             if (event.key === currentSymbolToType) {
-                lnsRef.current[csrRef.current.y].chars[csrRef.current.x].wasTyped = true;
-                setCsr({x: csrRef.current.x + 1, y: csrRef.current.y });
+                lnsRef.current[cY].chars[cX].wasTyped = true;
+                setCsr({x: cX + 1, y: cY });
             }   
-            return;
-        } else if (event.key === "Enter" && csrRef.current.y < lnsRef.current.length - 1 && 
-                    csrRef.current.x === lnsRef.current[csrRef.current.y].chars.length) {
-            setCsr({ x: 0, y: csrRef.current.y + 1 });
-            return;
+        } else if (event.key === "Enter" && cY < lnsRef.current.length - 1 && 
+                    lnsRef.current[cY].chars[cX].isFiller) {
+            setCsr({ x: 0, y: cY + 1 });
         }  
     }
 
@@ -61,7 +61,7 @@ function CodeArea(props: Props): JSX.Element {
                     lines?.map((line: CodeLine, lineNumber: number) => {
                         return (
                             <div className='line' key={lineNumber}>
-                                <div className='line-number-wrapper' style={{ paddingTop: `${lineNumber ? 0 : '10px'}` }}>
+                                <div className='line-number-wrapper'>
                                     <span className='line-number'>
                                         { lineNumber + 1 }
                                     </span>
@@ -69,7 +69,7 @@ function CodeArea(props: Props): JSX.Element {
                                 { error ? (
                                     <h1>An error ocurred: { error }</h1>
                                 ) : (
-                                    <div className='line-code-wrapper' style={{ paddingTop: `${lineNumber ? 0 : '10px'}` }}>
+                                    <div className='line-code-wrapper'>
                                         {    
                                             lines[lineNumber].chars.map((char: CodeCharacter, charIndex: number) => {
                                                 return (
@@ -82,18 +82,10 @@ function CodeArea(props: Props): JSX.Element {
                                                                 <span className='cursor'></span>
                                                             ) : null }
                                                         </div>
-                                                        { csr.x === lines[lineNumber].chars.length && 
-                                                            charIndex + 1 === lines[lineNumber].chars.length &&
-                                                            csr.y === lineNumber ? (
-                                                            <span className='cursor' style={{ position: 'relative' }}></span>
-                                                        ) : null }
                                                     </div>
                                                 )
                                             })
                                         }
-                                        { lines[lineNumber].chars.length === 0 && csr.y === lineNumber ? (
-                                            <span className='cursor' style={{ position: 'relative' }}></span>
-                                        ) : null }
                                     </div>
                                 )}
                             </div>
