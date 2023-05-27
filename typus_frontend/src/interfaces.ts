@@ -28,6 +28,20 @@ export interface CodeLine {
     chars: CodeCharacter[];
 }
 
+export interface CodeGrid {
+	/**
+	 * This interface represents a code sample grid.
+	 *
+	 *	@property {CodeLine[]} lines - Stores all the code lines.
+	 *	@property {string} langSlug - Language slug that is code written in.
+	 *
+	 *	@interface
+	 */
+	
+	lines: CodeLine[];
+	langSlug: string;
+}
+
 export interface Cursor {
     /**
      * This interface represents a cursor which is used in a code field.

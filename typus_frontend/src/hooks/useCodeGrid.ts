@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CodeLine, CodeCharacter } from '../interfaces';
+import { CodeGrid, CodeLine, CodeCharacter } from '../interfaces';
 import { FetchState } from '../interfaces';
 import { MAX_LINE_LENGTH } from '../constants';
 
@@ -24,8 +24,8 @@ interface Props {
  * 
  * @function
  */
-function useCodeGrid(props: Props): FetchState<CodeLine[]> {
-    const [state, setState] = useState<FetchState<CodeLine[]>>({ status: 'idle', data: null, error: null });
+function useCodeGrid(props: Props): FetchState<CodeGrid> {
+    const [state, setState] = useState<FetchState<CodeGrid>>({ status: 'idle', data: null, error: null });
 
     useEffect(() => {
         setState({ status: 'loading', data: null, error: null });
@@ -58,7 +58,8 @@ function useCodeGrid(props: Props): FetchState<CodeLine[]> {
 						}
                         lines.push(line);
                     }
-                    setState({ status: 'success', data: lines, error: null })
+					const codeGrid: CodeGrid = { lines: lines, langSlug: sample.Language };
+                    setState({ status: 'success', data: codeGrid, error: null })
                 } else {
                     setState({ status: 'error', data: null, error: `Could not fulfill the request, code ${responseData.status}` })
                 }
