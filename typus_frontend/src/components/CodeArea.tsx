@@ -41,7 +41,6 @@ function CodeArea(props: Props): JSX.Element {
 
     const handleKeyboard = (event: KeyboardEvent): void => {
 		const [cX, cY] = [csrRef.current.x, csrRef.current.y];
-
 		if (isCodeSymbol(event.key) && cX < gridRef.current.lines[cY].chars.length && !gridRef.current.lines[cY].chars[cX].isFiller) {
             const currentSymbolToType = gridRef.current.lines[cY].chars[cX].c;
             if (event.key === currentSymbolToType) {
@@ -49,6 +48,21 @@ function CodeArea(props: Props): JSX.Element {
                 setCsr({x: cX + 1, y: cY });
             }   
         } else if (event.key === "Enter" && cY < gridRef.current.lines.length - 1 && gridRef.current.lines[cY].chars[cX].isFiller) {
+			if (gridRef.current.langSlug === "py") {
+				let ident: number = 0;
+				
+				if (!gridRef.current.lines[cY + 1].chars[0].isFiller) {
+					for (let i = 0; i < MAX_LINE_LENGTH; i++) {
+						if (gridRef.current.lines[cY + 1].chars[i].c === ' ') {
+							ident++;
+						} else break;
+					}
+				}
+				const identSlice = gridRef.current.lines[cY + 1].chars.slice(0, ident);
+				identSlice.forEach((_, index) => identSlice[index].wasTyped = true);
+            	setCsr({ x: ident, y: cY + 1 });
+				return;
+			}
             setCsr({ x: 0, y: cY + 1 });
 		} else if (event.key === "Tab") {
 			event.preventDefault();
