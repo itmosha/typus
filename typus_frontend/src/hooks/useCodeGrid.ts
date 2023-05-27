@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { CodeLine, CodeCharacter } from '../interfaces';
 import { FetchState } from '../interfaces';
+import { MAX_LINE_LENGTH } from '../constants';
 
 
 interface Props {
@@ -46,7 +47,7 @@ function useCodeGrid(props: Props): FetchState<CodeLine[]> {
 
                     for (let i = 0; i < sample.Content.length; i++) {
                         const line: CodeLine = { chars: [] }
-						for (let j = 0; j < 100; j++) {
+						for (let j = 0; j < MAX_LINE_LENGTH; j++) {
 							if (j < sample.Content[i].length) {
 								const char: CodeCharacter = { c: sample.Content[i][j], wasTyped: false, isHighlighted: false, isFiller: false };
 								line.chars.push(char);

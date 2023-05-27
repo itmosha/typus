@@ -3,6 +3,7 @@ import './styles/code-area.sass'
 import { CodeCharacter, CodeLine, Cursor } from '../interfaces';
 import isCodeSymbol from '../lib/isCodeSymbol';
 import useCodeGrid from '../hooks/useCodeGrid';
+import { TAB_SIZE, MAX_LINE_LENGTH } from '../constants';
 
 
 interface Props {
@@ -52,19 +53,14 @@ function CodeArea(props: Props): JSX.Element {
             setCsr({ x: 0, y: cY + 1 });
 		} else if (event.key === "Tab") {
 			event.preventDefault();
+			if (cX <= MAX_LINE_LENGTH - TAB_SIZE) {
 
-			// TODO: unhardcode this stuff
-			if (cX < 97) {
-				if (lnsRef.current[cY].chars[cX].c     === ' ' && !lnsRef.current[cY].chars[cX].isFiller     && 
-					lnsRef.current[cY].chars[cX + 1].c === ' ' && !lnsRef.current[cY].chars[cX + 1].isFiller &&  
-					lnsRef.current[cY].chars[cX + 2].c === ' ' && !lnsRef.current[cY].chars[cX + 2].isFiller &&  
-					lnsRef.current[cY].chars[cX + 3].c === ' ' && !lnsRef.current[cY].chars[cX + 3].isFiller) {
-				
-					lnsRef.current[cY].chars[cX].wasTyped = true;
-					lnsRef.current[cY].chars[cX + 1].wasTyped = true;
-					lnsRef.current[cY].chars[cX + 2].wasTyped = true;
-					lnsRef.current[cY].chars[cX + 3].wasTyped = true;
-					console.log(lnsRef);
+				const tabSlice = lnsRef.current[cY].chars.slice(cX, cX + TAB_SIZE);
+				const isAllSpaces = tabSlice.every((char) => char.c === ' ');
+				const isAllNotFillers = tabSlice.every((char) => !char.isFiller);
+					
+				if (isAllSpaces && isAllNotFillers) {
+					tabSlice.forEach((_, index) => tabSlice[cX + index].wasTyped = true);
 					setCsr({ x: cX + 4, y: cY });
 				}
 			}
