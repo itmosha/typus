@@ -41,39 +41,75 @@ function CodeArea(props: Props): JSX.Element {
 
     const handleKeyboard = (event: KeyboardEvent): void => {
 		const [cX, cY] = [csrRef.current.x, csrRef.current.y];
-		if (isCodeSymbol(event.key) && cX < gridRef.current.lines[cY].chars.length && !gridRef.current.lines[cY].chars[cX].isFiller) {
-            const currentSymbolToType = gridRef.current.lines[cY].chars[cX].c;
+		const [lines, lang] = [gridRef.current.lines, gridRef.current.langSlug];
+
+		// Handle typing a regular code character
+		//
+		// Checks performed:
+		//     1. Entered symbol is a valid code character
+		//     2. Current line is not fully typed yet
+		//     3. Next character is not a filler
+		
+		if (isCodeSymbol(event.key) && cX < lines[cY].chars.length && !lines[cY].chars[cX].isFiller) {
+			
+			// Find the symbol that needs to be entered
+            const currentSymbolToType = lines[cY].chars[cX].c;
+
+			// If the entered one is right then mark it as typed in the grid and update the cursor position
             if (event.key === currentSymbolToType) {
-                gridRef.current.lines[cY].chars[cX].wasTyped = true;
+                lines[cY].chars[cX].isTyped = true;
                 setCsr({x: cX + 1, y: cY });
             }   
-        } else if (event.key === "Enter" && cY < gridRef.current.lines.length - 1 && gridRef.current.lines[cY].chars[cX].isFiller) {
-			if (gridRef.current.langSlug === "py") {
-				let ident: number = 0;
-				
-				if (!gridRef.current.lines[cY + 1].chars[0].isFiller) {
-					for (let i = 0; i < MAX_LINE_LENGTH; i++) {
-						if (gridRef.current.lines[cY + 1].chars[i].c === ' ') {
-							ident++;
-						} else break;
-					}
+
+		// Handle ENTER key
+		//
+		// Checks performed:
+		//     1. Entered key is enter
+		//     2. Current line is not the last line
+		//     3. Next character is a filler
+
+        } else if (event.key === "Enter" && cY < lines.length - 1 && lines[cY].chars[cX].isFiller) {
+			
+			// Initial identation size
+			let ident: number = 0;
+			
+			// Check if the next line is not empty
+			if (!lines[cY + 1].chars[0].isFiller) {
+
+				// Find how many spaces appear before the first actual symbol
+				for (let i = 0; i < MAX_LINE_LENGTH; i++) {
+					if (lines[cY + 1].chars[i].c === ' ') {
+						ident++;
+					} else break;
 				}
-				const identSlice = gridRef.current.lines[cY + 1].chars.slice(0, ident);
-				identSlice.forEach((_, index) => identSlice[index].wasTyped = true);
-            	setCsr({ x: ident, y: cY + 1 });
-				return;
 			}
-            setCsr({ x: 0, y: cY + 1 });
+
+			// Change states of lines and the cursor
+			const identSlice = lines[cY + 1].chars.slice(0, ident);
+			identSlice.forEach((_, index) => identSlice[index].isTyped = true);
+			setCsr({ x: ident, y: cY + 1 });
+
+		// Handle TAB key
 		} else if (event.key === "Tab") {
+
+			// Disable default TAB key behaviour
 			event.preventDefault();
+
+			// Check for the maximum line length
 			if (cX <= MAX_LINE_LENGTH - TAB_SIZE) {
 
+				// Get a slice of the elements which will be affected by the tab
 				const tabSlice = gridRef.current.lines[cY].chars.slice(cX, cX + TAB_SIZE);
+
+				// Perform checks:
+				//     1. All tabbed characters are spaces
+				//     2. All tabbed characted are not fillers
 				const isAllSpaces = tabSlice.every((char) => char.c === ' ');
 				const isAllNotFillers = tabSlice.every((char) => !char.isFiller);
 					
+				// If everything's fine change state of lines and the cursor
 				if (isAllSpaces && isAllNotFillers) {
-					tabSlice.forEach((_, index) => tabSlice[cX + index].wasTyped = true);
+					tabSlice.forEach((_, index) => tabSlice[cX + index].isTyped = true);
 					setCsr({ x: cX + 4, y: cY });
 				}
 			}
@@ -106,7 +142,7 @@ function CodeArea(props: Props): JSX.Element {
                                                 return (
                                                     <div style={{ display: 'flex' }} key={`${lineNumber}:${charIndex}`}>
                                                         <div style={{ display: 'flex'}}>
-                                                            <span className='line-code' style={{ opacity: `${char.wasTyped ? '1' : '0.5'}` }}>
+                                                            <span className='line-code' style={{ opacity: `${char.isTyped ? '1' : '0.5'}` }}>
                                                                 { char.c }
                                                             </span>
                                                             { csr.x === charIndex && csr.y === lineNumber ? (

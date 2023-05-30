@@ -11,7 +11,7 @@ export interface CodeCharacter {
      */
 
     c: string;
-    wasTyped: boolean;
+    isTyped: boolean;
     isHighlighted: boolean;
 	isFiller: boolean;
 }

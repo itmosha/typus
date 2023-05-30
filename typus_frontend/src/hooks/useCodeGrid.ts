@@ -49,10 +49,10 @@ function useCodeGrid(props: Props): FetchState<CodeGrid> {
                         const line: CodeLine = { chars: [] }
 						for (let j = 0; j < MAX_LINE_LENGTH; j++) {
 							if (j < sample.Content[i].length) {
-								const char: CodeCharacter = { c: sample.Content[i][j], wasTyped: false, isHighlighted: false, isFiller: false };
+								const char: CodeCharacter = { c: sample.Content[i][j], isTyped: false, isHighlighted: false, isFiller: false };
 								line.chars.push(char);
 							} else {
-								const char: CodeCharacter = { c: ' ', wasTyped: false, isHighlighted: false, isFiller: true };
+								const char: CodeCharacter = { c: ' ', isTyped: false, isHighlighted: false, isFiller: true };
 								line.chars.push(char);
 							}
 						}
