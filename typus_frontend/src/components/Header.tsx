@@ -20,6 +20,12 @@ function Header(): JSX.Element {
 		setIsRegisterWindowOpened(!isRegisterWindowOpened);
 	}
 
+	const logOut = () => {
+		localStorage.removeItem("access_token");
+		localStorage.removeItem("refresh_token");
+		window.location.replace(`${process.env.REACT_APP_PROTOCOL}://${process.env.REACT_APP_HOSTNAME}:3000/`);
+	}
+
     return (
 		<div className='page'>
 			{ isSignInWindowOpened ? (
@@ -40,8 +46,8 @@ function Header(): JSX.Element {
 				<div className='header-buttons'>
 					{ isLoggedIn ? (
 						<button
-							onClick={() => { localStorage.removeItem("access_token"); window.location.replace(`${process.env.REACT_APP_PROTOCOL}://${process.env.REACT_APP_HOSTNAME}:3000/`); }}
 							className='header-button' 
+							onClick={() => logOut()}
 						>
 							<h1 className='header-button-text'>
 								LOG OUT

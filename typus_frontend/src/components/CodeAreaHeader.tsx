@@ -6,11 +6,19 @@ import './styles/code-area-header.sass'
 interface Props {}
 
 const CodeAreaHeader: React.FC<{}> = (props: Props): JSX.Element => {
+
+	const homePage = () => {
+		window.location.replace(`${process.env.REACT_APP_PROTOCOL}://${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_FRONTEND_PORT}/`)
+	}
+
     return (
         <div className='code-area-header-wrapper'>
-            <button className='reset-button' onClick={() => {}}>
-                <BiReset size='24px' color='#B9B9B9' />
-            </button>
+
+			<button className='code-area-logo-button' onClick={() => homePage()}>
+				<h1 className='code-area-logo-text'>
+					Typus
+				</h1>
+			</button>
         </div>
     );
 }
