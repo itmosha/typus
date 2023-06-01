@@ -16,11 +16,13 @@ function CodeArea(props: Props): JSX.Element {
     const { status, data, error } = useCodeGrid({ sampleId: props.sampleId });
 	const [grid, _setGrid] = useState<CodeGrid>({ lines: [], langSlug: '', cntSymbols: 0 });
     const [csr, _setCsr] = useState<Cursor>({ x: 0, y: 0});
+	const [isRunning, setIsRunning] = useState<boolean>(false);
 	const [secPassed, setSecPassed] = useState<number>(0);
 	const [cntSymbTyped, setCntSymbTyped] = useState<number>(0);
 
     const gridRef = useRef(grid);
     const csrRef = useRef(csr);
+	const rafRef = useRef<number | null>(null);
 
 	const setGrid = (data: CodeGrid): void => {
         gridRef.current = data;
@@ -32,20 +34,52 @@ function CodeArea(props: Props): JSX.Element {
         _setCsr(data);
     }
 
-	const homePage = () => {
+	const homePage = (): void => {
 		window.location.replace(`${process.env.REACT_APP_PROTOCOL}://${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_FRONTEND_PORT}/`)
+	}
+
+	const startStopwatch = (): void => {
+		if (!isRunning) {
+			setIsRunning(true);
+			rafRef.current = requestAnimationFrame(updateStopwatch);
+		}
+	}
+
+	const stopStopwatch = (): void => {
+		if (isRunning) {
+			setIsRunning(false);
+			cancelAnimationFrame(rafRef.current!);
+		}
+	}
+
+	const resetStopwatch = (): void => {
+		stopStopwatch();
+		setSecPassed(0);
+	}
+
+	const updateStopwatch = (timestamp: number): void => {
+		setSecPassed((prevSecPassed: number) => {
+			const delta = timestamp - prevSecPassed;
+			return Math.floor((prevSecPassed + delta) / 1000);
+		});
+		rafRef.current = requestAnimationFrame(updateStopwatch);
 	}
 
     useEffect(() => {
         if (status === 'success') {
             setGrid(data);
+
+			if (!isRunning) {
+				startStopwatch();
+			}
         }
+
         document.addEventListener("keydown", handleKeyboard);
 
         return () => {
             document.removeEventListener("keydown", handleKeyboard);
         }
-    }, [data, cntSymbTyped]);
+    }, [data, cntSymbTyped, isRunning, secPassed]);
 
     const handleKeyboard = (event: KeyboardEvent): void => {
 		const [cX, cY] = [csrRef.current.x, csrRef.current.y];
