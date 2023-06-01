@@ -3,6 +3,7 @@ import './styles/code-area.sass'
 import { CodeGrid, CodeLine, CodeCharacter, Cursor } from '../interfaces';
 import isCodeSymbol from '../lib/isCodeSymbol';
 import useCodeGrid from '../hooks/useCodeGrid';
+import { CiSettings, CiStopwatch, CiEdit } from 'react-icons/ci';
 import { TAB_SIZE, MAX_LINE_LENGTH } from '../constants';
 
 
@@ -13,8 +14,10 @@ interface Props {
 
 function CodeArea(props: Props): JSX.Element {
     const { status, data, error } = useCodeGrid({ sampleId: props.sampleId });
-	const [grid, _setGrid] = useState<CodeGrid>({ lines: [], langSlug: '' });
+	const [grid, _setGrid] = useState<CodeGrid>({ lines: [], langSlug: '', cntSymbols: 0 });
     const [csr, _setCsr] = useState<Cursor>({ x: 0, y: 0});
+	const [secPassed, setSecPassed] = useState<number>(0);
+	const [cntSymbTyped, setCntSymbTyped] = useState<number>(0);
 
     const gridRef = useRef(grid);
     const csrRef = useRef(csr);
@@ -42,7 +45,7 @@ function CodeArea(props: Props): JSX.Element {
         return () => {
             document.removeEventListener("keydown", handleKeyboard);
         }
-    }, [data]);
+    }, [data, cntSymbTyped]);
 
     const handleKeyboard = (event: KeyboardEvent): void => {
 		const [cX, cY] = [csrRef.current.x, csrRef.current.y];
@@ -61,9 +64,12 @@ function CodeArea(props: Props): JSX.Element {
             const currentSymbolToType = lines[cY].chars[cX].c;
 
 			// If the entered one is right then mark it as typed in the grid and update the cursor position
+			// Also increment the symbol counter
             if (event.key === currentSymbolToType) {
                 lines[cY].chars[cX].isTyped = true;
                 setCsr({x: cX + 1, y: cY });
+				setCntSymbTyped(cntSymbTyped + 1);
+				console.log('ok');
             }   
 
 		// Handle ENTER key
@@ -131,6 +137,20 @@ function CodeArea(props: Props): JSX.Element {
 						Typus
 					</h1>
 				</button>
+				<div className='code-area-info-section'>
+					<h2 className='stopwatch-text'>
+						{ secPassed }
+					</h2>
+					<CiStopwatch size='30px' className='code-area-info-icon' />
+					<hr className='code-area-info-section-splitter' />
+					<CiEdit size='30px' className='code-area-info-icon' />
+					<h2 className='counter-text'>
+						{ cntSymbTyped }/{ grid.cntSymbols }
+					</h2>
+				</div>
+				<div className='code-area-icons-section'>
+					<CiSettings size='30px' className='code-area-icon' />
+				</div>
 			</div>
             <div className='code-area-wrapper'>
                 <div className='code-area-top-gap'>

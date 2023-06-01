@@ -13,28 +13,8 @@ $font-exo: 'Exo', sans-serif
 $font-iosevka: 'Iosevka', monospace
 $font-code: 'Roboto Mono', monospace
 
-// SIZES
-
-// code-area
-$code-area-header-height: 50px
-$code-area-header-gap-height: 10px
-$code-area-line-height: 24px
-$code-area-line-number-section-width: 40px
-$code-area-line-font-size: 1rem
-$code-area-cursor-height: 1.5rem
-$code-area-cursor-width: 1px
 
 // COLORS
-
-// code-area
-$code-area-bg-color: #1A1A1A
-$code-area-header-color: #292929
-$code-area-sidebar-color: #202020
-$code-area-line-number-section-color: #202020
-$code-area-sidebar-color: #202020 // get rid of this
-$code-area-line-number-color: #727272
-$code-area-cursor-color: #F1F1F1
-$code-area-info-section-color: #292929
 
 $header-color: #292929
 $bg-color: #1A1A1A
@@ -71,7 +51,7 @@ $error-text-clr: rgb(255, 50, 50)
 
 @mixin window-gradient()
     background-color: $header-color
-    background: linear-gradient(120deg, $header-color, $code-area-sidebar-color)
+    background: linear-gradient(120deg, #292929, #202020)
 
 .form-field
     font-size: 18px

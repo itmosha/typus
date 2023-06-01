@@ -43,12 +43,22 @@ function useCodeGrid(props: Props): FetchState<CodeGrid> {
                 
                 if (responseData.status === 200) {
                     const sample = await responseData.json();
-                    const lines: CodeLine[] = []
+                    const lines: CodeLine[] = [];
+					let countSymbols: number = 0;
 
                     for (let i = 0; i < sample.Content.length; i++) {
-                        const line: CodeLine = { chars: [] }
+                        const line: CodeLine = { chars: [] };
+						let lineStarted: boolean = false;
+
 						for (let j = 0; j < MAX_LINE_LENGTH; j++) {
 							if (j < sample.Content[i].length) {
+								
+								if (lineStarted) {
+									countSymbols++;
+								} else if (sample.Content[i][j] != ' ') {
+									lineStarted = true;
+									countSymbols++;
+								}
 								const char: CodeCharacter = { c: sample.Content[i][j], isTyped: false, isHighlighted: false, isFiller: false };
 								line.chars.push(char);
 							} else {
@@ -58,7 +68,7 @@ function useCodeGrid(props: Props): FetchState<CodeGrid> {
 						}
                         lines.push(line);
                     }
-					const codeGrid: CodeGrid = { lines: lines, langSlug: sample.Language };
+					const codeGrid: CodeGrid = { lines: lines, langSlug: sample.Language, cntSymbols: countSymbols };
                     setState({ status: 'success', data: codeGrid, error: null })
                 } else {
                     setState({ status: 'error', data: null, error: `Could not fulfill the request, code ${responseData.status}` })

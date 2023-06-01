@@ -1,12 +1,35 @@
 @import "../../global"
 
+// SIZES
+$code-area-header-height: 50px
+$code-area-header-padding: 10px
+$code-area-header-inner-height: calc($code-area-header-height - 2 * $code-area-header-padding)
+$code-area-header-font-size: 20px
+$code-area-header-gap-height: 10px
+$code-area-line-height: 24px
+$code-area-line-number-section-width: 40px
+$code-area-line-font-size: 1rem
+$code-area-cursor-height: 1.5rem
+$code-area-cursor-width: 1px
+
+// COLORS
+$code-area-bg-color: #1A1A1A
+$code-area-header-color: #292929
+$code-area-icon-color: #B3B3B3
+$code-area-sidebar-color: #202020
+$code-area-line-number-section-color: #202020
+$code-area-sidebar-color: #202020 // get rid of this
+$code-area-line-number-color: #727272
+$code-area-cursor-color: #F1F1F1
+
 .code-area-header-wrapper
     display: flex
     box-sizing: border-box
+    justify-content: space-between
     height: $code-area-header-height
     max-height: $code-area-header-height
     min-height: $code-area-header-height
-    padding: 10px
+    padding: $code-area-header-padding
     background-color: $code-area-header-color
 
 .code-area-logo-button
@@ -24,6 +47,42 @@
     color: $text-color
     background-color: $invisible !important
 
+.code-area-info-section
+    display: flex
+    height: $code-area-header-inner-height
+
+.code-area-info-section-splitter
+    width: .1px
+    height: $code-area-header-inner-height
+    margin: 0
+    background-color: $code-area-icon-color
+    border-color: $code-area-icon-color
+
+.stopwatch-text
+    margin: auto 0
+    font-size: $code-area-header-font-size
+    font-weight: 200
+    font-family: $font-iosevka
+    color: $text-color
+    
+.counter-text
+    margin: auto 0
+    font-size: $code-area-header-font-size
+    font-weight: 200
+    font-family: $font-iosevka
+    color: $text-color
+
+.code-area-icons-section
+    height: $code-area-header-inner-height
+
+.code-area-icon
+    color: $code-area-icon-color
+    cursor: pointer
+
+.code-area-info-icon
+    color: $code-area-icon-color
+    padding-inline: 10px
+    
 .code-area-wrapper
     position: relative
     display: flex

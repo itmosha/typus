@@ -34,12 +34,14 @@ export interface CodeGrid {
 	 *
 	 *	@property {CodeLine[]} lines - Stores all the code lines.
 	 *	@property {string} langSlug - Language slug that is code written in.
-	 *
+	 *	@property {number} cntSymbols - Amount of symbols in code sample.
+	 * 	
 	 *	@interface
 	 */
 	
 	lines: CodeLine[];
 	langSlug: string;
+	cntSymbols: number;
 }
 
 export interface Cursor {
