@@ -1,6 +1,5 @@
 import React from 'react'
 import CodeArea from '../components/CodeArea'
-import CodeAreaHeader from '../components/CodeAreaHeader'
 import './styles/index.sass'
 import Header from '../components/Header'
 

@@ -23,10 +23,15 @@ function CodeArea(props: Props): JSX.Element {
         gridRef.current = data;
         _setGrid(data);
     }
+	
     const setCsr = (data: Cursor): void => {
         csrRef.current = data;
         _setCsr(data);
     }
+
+	const homePage = () => {
+		window.location.replace(`${process.env.REACT_APP_PROTOCOL}://${process.env.REACT_APP_HOSTNAME}:${process.env.REACT_APP_FRONTEND_PORT}/`)
+	}
 
     useEffect(() => {
         if (status === 'success') {
@@ -119,6 +124,14 @@ function CodeArea(props: Props): JSX.Element {
 
     return (
         <>
+			<div className='code-area-header-wrapper'>
+
+				<button className='code-area-logo-button' onClick={() => homePage()}>
+					<h1 className='code-area-logo-text'>
+						Typus
+					</h1>
+				</button>
+			</div>
             <div className='code-area-wrapper'>
                 <div className='code-area-top-gap'>
                     <div className='code-area-filler-line-numbers'></div>
