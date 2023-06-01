@@ -1,64 +1,64 @@
 @import "../../global"
 
 .code-area-wrapper
-    font-weight: 500
     position: relative
-    background-color: $bg-color
     display: flex
     flex-direction: column
-    height: calc(100vh - 40px)
+    height: calc(100vh - $code-area-header-height)
+    background-color: $bg-color
 
-.top-gap
-    height: 10px
-    display: inline-block
+.code-area-top-gap
     position: relative
+    display: inline-block
+    height: $code-area-header-gap-height
 
-.filler
+.code-area-line
+    display: flex
+    white-space: pre
+    height: $code-area-line-height
+    font-family: $font-code
+    font-weight: 500
+
+.code-area-line-number-wrapper
+    box-sizing: border-box
+    width: $code-area-line-number-section-width
+    padding-inline: 10px
+    background-color: $code-area-line-number-section-color
+
+.code-area-line-number
+    float: right
+    color: $code-area-line-number-color
+
+.code-line-wrapper
+    display: flex
+    padding-inline-start: 10px
+
+.code-line
+    color: $text-color
+    font-size: $code-font-size
+
+.code-area-filler
+    position: relative
+    display: inline-block
     flex-grow: 1
-    display: inline-block
-    position: relative
 
-.filler-line-numbers
-    background-color: $sidebars-color
+.code-area-filler-line-numbers
+    background-color: $code-area-sidebar-color
     width: 60px
     height: 100%
     position: absolute
 
-.line
-    display: flex
-    white-space: pre
-    font-family: $font-code
-    font-weight: 500
-    height: 24px
-
-.line-number-wrapper
-    padding-inline: 10px
-    width: 40px
-    background-color: $sidebars-color
-
-.line-number
-    color: #727272
-    float: right
-
-.line-code-wrapper
-    display: flex
-    padding-inline-end: 5px
-    padding-inline-start: 10px
-
-.line-code
-    color: $text-color
-    font-size: 1rem
+.code-area-cursor
+    position: absolute
+    display: inline-block
+    height: $code-area-cursor-height
+    width: $code-area-cursor-width
+    background-color: $code-area-cursor-color
+    animation: cursor-blink .75s infinite
 
 @keyframes cursor-blink
     from, to
-        background-color: #F1F1F1
+        background-color: $code-area-cursor-color
     50%
-        background-color: #1A1A1A
+        background-color: $bg-color
 
-.cursor
-    display: inline-block
-    position: absolute
-    animation: cursor-blink .75s infinite
-    background-color: #F1F1F1
-    height: 1.5rem
-    width: 1px

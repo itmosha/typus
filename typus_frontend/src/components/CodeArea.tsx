@@ -120,33 +120,32 @@ function CodeArea(props: Props): JSX.Element {
     return (
         <>
             <div className='code-area-wrapper'>
-                <div className='top-gap'>
-                    <div className='filler-line-numbers'></div>
-                    <div className='filler-code'></div>
+                <div className='code-area-top-gap'>
+                    <div className='code-area-filler-line-numbers'></div>
                 </div>
                 {
                     grid.lines?.map((line: CodeLine, lineNumber: number) => {
                         return (
-                            <div className='line' key={lineNumber}>
-                                <div className='line-number-wrapper'>
-                                    <span className='line-number'>
+                            <div className='code-area-line' key={lineNumber}>
+                                <div className='code-area-line-number-wrapper'>
+                                    <span className='code-area-line-number'>
                                         { lineNumber + 1 }
                                     </span>
                                 </div>
                                 { error ? (
                                     <h1>An error ocurred: { error }</h1>
                                 ) : (
-                                    <div className='line-code-wrapper'>
+                                    <div className='code-line-wrapper'>
                                         {    
                                             grid.lines[lineNumber].chars.map((char: CodeCharacter, charIndex: number) => {
                                                 return (
                                                     <div style={{ display: 'flex' }} key={`${lineNumber}:${charIndex}`}>
                                                         <div style={{ display: 'flex'}}>
-                                                            <span className='line-code' style={{ opacity: `${char.isTyped ? '1' : '0.5'}` }}>
+                                                            <span className='code-line' style={{ opacity: `${char.isTyped ? '1' : '0.5'}` }}>
                                                                 { char.c }
                                                             </span>
                                                             { csr.x === charIndex && csr.y === lineNumber ? (
-                                                                <span className='cursor'></span>
+                                                                <span className='code-area-cursor'></span>
                                                             ) : null }
                                                         </div>
                                                     </div>
@@ -159,9 +158,8 @@ function CodeArea(props: Props): JSX.Element {
                         )
                     })
                 }
-                <div className='filler'>
-                    <div className='filler-line-numbers'></div>
-                    <div className='filler-code'></div>
+                <div className='code-area-filler'>
+                    <div className='code-area-filler-line-numbers'></div>
                 </div>
             </div>
         </>
