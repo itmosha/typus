@@ -1,33 +1,26 @@
 @import "../../global"
  
 .code-area-header-wrapper
-    box-sizing: border-box
     display: flex
-    height: 40px
-    min-height: 40px
-    max-height: 40px
-    padding: 8px
-    background-color: $header-color
+    box-sizing: border-box
+    height: $code-area-header-height
+    max-height: $code-area-header-height
+    min-height: $code-area-header-height
+    padding: 10px
+    background-color: $code-area-header-color
 
 .code-area-logo-button
-    background-color: $header-color
     padding: 0
     border: 0
     cursor: pointer
+    background-color: $code-area-header-color
 
 .code-area-logo-text
-    background-color: $invisible !important
     margin: 0
-    color: $text-color
-    font-weight: 600
-    font-family: $font-exo
-    text-transform: uppercase
     font-size: 24px
-    line-height: 24px
+    font-weight: 600
+    text-transform: uppercase
+    font-family: $font-exo
+    color: $text-color
+    background-color: $invisible !important
 
-.reset-button
-    background-color: $header-color
-    size: 24px
-    padding: 0
-    border: 0
-    cursor: pointer
