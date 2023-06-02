@@ -11,7 +11,6 @@ interface Props {
     sampleId: string;
 }
 
-
 function CodeArea(props: Props): JSX.Element {
     const { status, data, error } = useCodeGrid({ sampleId: props.sampleId });
 	const [grid, _setGrid] = useState<CodeGrid>({ lines: [], langSlug: '', cntSymbols: 0 });
@@ -68,10 +67,6 @@ function CodeArea(props: Props): JSX.Element {
     useEffect(() => {
         if (status === 'success') {
             setGrid(data);
-
-			if (!isRunning) {
-				startStopwatch();
-			}
         }
 
         document.addEventListener("keydown", handleKeyboard);
@@ -79,11 +74,22 @@ function CodeArea(props: Props): JSX.Element {
         return () => {
             document.removeEventListener("keydown", handleKeyboard);
         }
-    }, [data, cntSymbTyped, isRunning, secPassed]);
+    }, [data, cntSymbTyped, isRunning, secPassed, grid]);
 
     const handleKeyboard = (event: KeyboardEvent): void => {
+
+		// Quit if the sample is done
+		
+		if (cntSymbTyped === grid.cntSymbols) return;
+
 		const [cX, cY] = [csrRef.current.x, csrRef.current.y];
 		const [lines, lang] = [gridRef.current.lines, gridRef.current.langSlug];
+
+		// Start the stopwatch when any key is pressed
+		
+		if (!isRunning) {
+			startStopwatch();
+		}
 
 		// Handle typing a regular code character
 		//
@@ -103,7 +109,10 @@ function CodeArea(props: Props): JSX.Element {
                 lines[cY].chars[cX].isTyped = true;
                 setCsr({x: cX + 1, y: cY });
 				setCntSymbTyped(cntSymbTyped + 1);
-				console.log('ok');
+				
+				if (cntSymbTyped + 1 === grid.cntSymbols) {
+					stopStopwatch();
+				}
             }   
 
 		// Handle ENTER key
