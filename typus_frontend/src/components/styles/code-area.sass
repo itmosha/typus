@@ -11,6 +11,9 @@ $code-area-line-number-section-width: 40px
 $code-area-line-font-size: 1rem
 $code-area-cursor-height: 1.5rem
 $code-area-cursor-width: 1px
+$score-window-width: 300px
+$score-window-height: 360px
+$score-window-buttons-height: 40px
 
 // COLORS
 $code-area-bg-color: #1A1A1A
@@ -105,6 +108,8 @@ $code-area-cursor-color: #F1F1F1
 .code-area-line-number-wrapper
     box-sizing: border-box
     width: $code-area-line-number-section-width
+    max-width: $code-area-line-number-section-width
+    min-width: $code-area-line-number-section-width
     padding-inline: 10px
     background-color: $code-area-line-number-section-color
 
@@ -128,6 +133,8 @@ $code-area-cursor-color: #F1F1F1
 .code-area-filler-line-numbers
     background-color: $code-area-sidebar-color
     width: $code-area-line-number-section-width
+    max-width: $code-area-line-number-section-width
+    min-width: $code-area-line-number-section-width
     height: 100%
     position: absolute
 
@@ -138,6 +145,64 @@ $code-area-cursor-color: #F1F1F1
     width: $code-area-cursor-width
     background-color: $code-area-cursor-color
     animation: cursor-blink .75s infinite
+
+.score-window
+    position: absolute
+    display: flex
+    flex-direction: column
+    box-sizing: border-box
+    justify-content: space-between
+    text-align: center
+
+    width: $score-window-width
+    height: $score-window-height
+    left: calc((100vw - $score-window-width) / 2)
+    top: calc((100vh - $score-window-height) / 2)
+    padding: 20px 10px 40px
+    border-radius: $window-border-radius
+
+    background-color: $window-color
+    color: $text-color
+    box-shadow: 2px 5px 10px 0px rgba(0, 0, 0, 0.5)
+    animation: slideDown .25s
+
+.score-window-heading
+
+.score-window-time
+
+.score-window-buttons
+    height: $score-window-buttons-height
+
+.score-window-retry-button
+    font-weight: 600
+    font-size: 16px
+    color: $text-color
+    width: 100px
+    cursor: pointer
+    border: 0
+    height: $score-window-buttons-height
+    border-radius: $button-border-radius
+    background-color: $button-color-1
+    box-shadow: $button-box-shadow
+
+.score-window-retry-button:hover
+    background-color: $button-hover-color-1
+
+.score-window-menu-button
+    font-weight: 600
+    font-size: 16px
+    color: $text-color
+    width: 80px
+    cursor: pointer
+    border: 0
+    margin-left: 20px
+    height: $score-window-buttons-height
+    border-radius: $button-border-radius
+    background-color: $button-color-2
+    box-shadow: $button-box-shadow
+
+.score-window-menu-button:hover
+    background-color: $button-hover-color-2
 
 @keyframes cursor-blink
     from, to

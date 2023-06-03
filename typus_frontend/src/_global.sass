@@ -13,6 +13,10 @@ $font-exo: 'Exo', sans-serif
 $font-iosevka: 'Iosevka', monospace
 $font-code: 'Roboto Mono', monospace
 
+// SIZES
+
+$window-border-radius: 2rem
+$button-border-radius: 0.5rem
 
 // COLORS
 
@@ -20,17 +24,49 @@ $header-color: #292929
 $bg-color: #1A1A1A
 $blur-color: rgba(0, 0, 0, 0.25)
 $icons-color: #B9B9B9
-$text-color: #b3b3b3
+$text-color: #b1b1b1
 $fields-text-color: #E3E3E3
 $header-button-color-hover: rgba(50, 50, 50, 1)
 $header-button-color: rgba(50, 50, 50, 0.6)
-$windows-color: $header-color
+$window-color: $header-color
 $invisible: rgba(0, 0, 0, 0)
 $fields-color: rgba(79, 79, 79, 1)
 $fields-placeholder-color: #AFAFAF
 $fields-border-color: rgb(100, 100, 100)
 $error-text-clr: rgb(255, 50, 50)
-   
+
+$button-color-1: rgba(79, 79, 79, 1)
+$button-color-2: rgba(59, 59, 59, 1)
+$button-hover-color-1: rgba(89, 89, 89, 1)
+$button-hover-color-2: rgba(69, 69, 69, 1)
+$button-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3)
+
+// CLASSES
+
+.dark-bg
+    position: absolute
+    margin: 0
+    width: 100vw
+    height: 100vh
+    background-color: $blur-color
+    z-index: 100
+    animation: fadeIn .25s
+
+.form-error
+    text-align: start
+    margin: 5px 0px 7px
+    padding-inline: 20px
+    color: $error-text-clr
+
+.form-field:focus
+    border: 1px solid $fields-border-color
+
+.form-field::placeholder
+    color: $fields-placeholder-color
+    
+.form-field:-webkit-autofill .form-field:-webkit-autofill:hover .form-field:-webkit-autofill:focus .form-field:-webkit-autofill:active
+    -webkit-background-color: $fields-color !important
+
 // ANIMATIONS 
 
 @keyframes slideDown
@@ -66,19 +102,4 @@ $error-text-clr: rgb(255, 50, 50)
     padding-inline: 16px
     height: 50px
     width: 300px
-
-.form-error
-    text-align: start
-    margin: 5px 0px 7px
-    padding-inline: 20px
-    color: $error-text-clr
-
-.form-field:focus
-    border: 1px solid $fields-border-color
-
-.form-field::placeholder
-    color: $fields-placeholder-color
-    
-.form-field:-webkit-autofill .form-field:-webkit-autofill:hover .form-field:-webkit-autofill:focus .form-field:-webkit-autofill:active
-    -webkit-background-color: $fields-color !important
 

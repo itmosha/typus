@@ -16,6 +16,7 @@ function CodeArea(props: Props): JSX.Element {
 	const [grid, _setGrid] = useState<CodeGrid>({ lines: [], langSlug: '', cntSymbols: 0 });
     const [csr, _setCsr] = useState<Cursor>({ x: 0, y: 0});
 	const [isRunning, setIsRunning] = useState<boolean>(false);
+	const [showScore, setShowScore] = useState<boolean>(false);
 	const [secPassed, setSecPassed] = useState<number>(0);
 	const [cntSymbTyped, setCntSymbTyped] = useState<number>(0);
 
@@ -62,6 +63,11 @@ function CodeArea(props: Props): JSX.Element {
 			return Math.floor((prevSecPassed + delta) / 1000);
 		});
 		rafRef.current = requestAnimationFrame(updateStopwatch);
+	}
+
+	const reset = (): void => {
+		// TODO: implement this properly
+		window.location.reload();
 	}
 
     useEffect(() => {
@@ -112,6 +118,7 @@ function CodeArea(props: Props): JSX.Element {
 				
 				if (cntSymbTyped + 1 === grid.cntSymbols) {
 					stopStopwatch();
+					setShowScore(true);
 				}
             }   
 
@@ -173,6 +180,18 @@ function CodeArea(props: Props): JSX.Element {
 
     return (
         <>
+			{ showScore ? (
+				<div className='dark-bg'>
+					<div className='score-window'>
+						<h1 className='score-window-heading'>Your score</h1>
+						<h2 className='score-window-time'>Time: { secPassed } seconds</h2>
+						<div className='score-window-buttons'>
+							<button className='score-window-retry-button' onClick={() => reset()}>Try again</button>
+							<button className='score-window-menu-button' onClick={() => { reset(); homePage(); }}>Menu</button>
+						</div>
+					</div>
+				</div>
+			) : null }
 			<div className='code-area-header-wrapper'>
 
 				<button className='code-area-logo-button' onClick={() => homePage()}>
