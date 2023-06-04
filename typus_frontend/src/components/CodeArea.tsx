@@ -174,9 +174,14 @@ function CodeArea(props: Props): JSX.Element {
 					setCsr({ x: cX + 4, y: cY });
 				}
 			}
+		} else if (event.key === "Escape") {
+
+			// Restart the game
+			// TODO: implement this properly
+			
+			window.location.reload();
 		}
     }
-
 
     return (
         <>
