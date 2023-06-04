@@ -40,6 +40,7 @@ export interface CodeGrid {
 	 */
 	
 	lines: CodeLine[];
+	title: string;
 	langSlug: string;
 	cntSymbols: number;
 }

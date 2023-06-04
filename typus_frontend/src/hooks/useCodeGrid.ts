@@ -17,7 +17,7 @@ interface Props {
 }
 
 /**
- * useCodeSample is a custom React hook forconvenient data retrieving from the samples API.
+ * useCodeSample is a custom React hook for convenient data retrieving from the samples API.
  * 
  * @param {Props} props - The hook props.
  * @returns {State} - An object containing the state of a request. 
@@ -68,7 +68,7 @@ function useCodeGrid(props: Props): FetchState<CodeGrid> {
 						}
                         lines.push(line);
                     }
-					const codeGrid: CodeGrid = { lines: lines, langSlug: sample.Language, cntSymbols: countSymbols };
+					const codeGrid: CodeGrid = { lines: lines, title: sample.Title, langSlug: sample.Language, cntSymbols: countSymbols };
                     setState({ status: 'success', data: codeGrid, error: null })
                 } else {
                     setState({ status: 'error', data: null, error: `Could not fulfill the request, code ${responseData.status}` })

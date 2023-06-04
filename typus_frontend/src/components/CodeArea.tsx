@@ -4,7 +4,7 @@ import { CodeGrid, CodeLine, CodeCharacter, Cursor } from '../interfaces';
 import isCodeSymbol from '../lib/isCodeSymbol';
 import useCodeGrid from '../hooks/useCodeGrid';
 import { CiSettings, CiStopwatch, CiEdit } from 'react-icons/ci';
-import { TAB_SIZE, MAX_LINE_LENGTH } from '../constants';
+import { LANGUAGES, TAB_SIZE, MAX_LINE_LENGTH } from '../constants';
 
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 
 function CodeArea(props: Props): JSX.Element {
     const { status, data, error } = useCodeGrid({ sampleId: props.sampleId });
-	const [grid, _setGrid] = useState<CodeGrid>({ lines: [], langSlug: '', cntSymbols: 0 });
+	const [grid, _setGrid] = useState<CodeGrid>({ lines: [], title: '', langSlug: '', cntSymbols: 0 });
     const [csr, _setCsr] = useState<Cursor>({ x: 0, y: 0});
 	const [isRunning, setIsRunning] = useState<boolean>(false);
 	const [showScore, setShowScore] = useState<boolean>(false);
@@ -262,6 +262,17 @@ function CodeArea(props: Props): JSX.Element {
                     <div className='code-area-filler-line-numbers'></div>
                 </div>
             </div>
+			<div className='code-area-footer'>
+				{ LANGUAGES.has(grid?.langSlug) ? (
+					<div className='code-area-footer-lang-wrapper'>
+						<img src={`/langs/${grid.langSlug}.svg`} className='code-area-footer-lang-logo' />
+						<h2 className='code-area-footer-lang-text'>{ LANGUAGES.get(grid.langSlug) }</h2>
+					</div>
+				) : <div></div> }
+				<div>
+				<h2 className='code-area-footer-sample-name'>{ grid?.title }</h2>
+				</div><div className='temporary'></div>
+			</div>
         </>
     )
 }

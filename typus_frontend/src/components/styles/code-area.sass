@@ -14,6 +14,11 @@ $code-area-cursor-width: 1px
 $score-window-width: 300px
 $score-window-height: 360px
 $score-window-buttons-height: 40px
+$code-area-footer-height: 60px
+$code-area-footer-padding: 10px
+$code-area-footer-inner-height: calc($code-area-footer-height - 2 * $code-area-footer-padding)
+$code-area-footer-font-size-large: 20px
+$code-area-footer-font-size-small: 18px
 
 // COLORS
 $code-area-bg-color: #1A1A1A
@@ -24,6 +29,7 @@ $code-area-line-number-section-color: #202020
 $code-area-sidebar-color: #202020
 $code-area-line-number-color: #727272
 $code-area-cursor-color: #F1F1F1
+$code-area-footer-color: #202020
 
 .code-area-header-wrapper
     display: flex
@@ -90,7 +96,7 @@ $code-area-cursor-color: #F1F1F1
     position: relative
     display: flex
     flex-direction: column
-    height: calc(100vh - $code-area-header-height)
+    height: calc(100vh - $code-area-header-height - $code-area-footer-height)
     background-color: $code-area-bg-color
 
 .code-area-top-gap
@@ -204,6 +210,41 @@ $code-area-cursor-color: #F1F1F1
 .score-window-menu-button:hover
     background-color: $button-hover-color-2
 
+.code-area-footer
+    display: flex
+    justify-content: space-between
+    box-sizing: border-box
+    height: $code-area-footer-height
+    min-height: $code-area-footer-height
+    max-height: $code-area-footer-height
+    padding: $code-area-footer-padding
+    background-color: $code-area-footer-color
+
+.code-area-footer-lang-wrapper
+    display: flex
+
+.code-area-footer-lang-logo
+    padding: 3px
+    height: calc($code-area-footer-inner-height - 6px)
+
+.code-area-footer-lang-text
+    margin-block: 0px
+    margin-left: 5px
+    line-height: $code-area-footer-inner-height
+    font-size: $code-area-footer-font-size-small
+    font-family: $font-exo
+    font-weight: 500
+    color: $text-color
+
+.code-area-footer-sample-name
+    margin-block: 0px
+    margin-right: 10px
+    line-height: $code-area-footer-inner-height
+    font-size: $code-area-footer-font-size-large
+    font-family: $font-exo
+    font-weight: 500
+    color: $text-color
+    
 @keyframes cursor-blink
     from, to
         background-color: $code-area-cursor-color
