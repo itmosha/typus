@@ -18,13 +18,13 @@ Typus is a website created for practising quick code typing. No third-party fron
 
 - Fully functional authentication and authorization with JWT
 - Choosing a code sample from all samples list
+- Symbol counter and stopwatch
 - Typing a chosen sample 
-- Auto identation for Python
-- Creating custom samples in management page (only python code is supported for now)
+- Auto identation
 
 ## Features coming soon
 
 - Syntax highlighting
 - Errors highlighting
-- Reseting the attempt
+- Admin page
 
