@@ -17,55 +17,83 @@ $font-code: 'Roboto Mono', monospace
 
 $window-border-radius: 2rem
 $button-border-radius: 0.5rem
+$form-field-border-radius: 0.5rem
+
+$window-button-height: 40px
+$form-field-font-size: 18px
+$button-font-size: 18px
 
 // COLORS
 
-$header-color: #292929
 $bg-color: #1A1A1A
-$blur-color: rgba(0, 0, 0, 0.25)
-$icons-color: #B9B9B9
-$text-color: #b1b1b1
-$fields-text-color: #E3E3E3
-$header-button-color-hover: rgba(50, 50, 50, 1)
-$header-button-color: rgba(50, 50, 50, 0.6)
-$window-color: $header-color
-$invisible: rgba(0, 0, 0, 0)
-$fields-color: rgba(79, 79, 79, 1)
-$fields-placeholder-color: #AFAFAF
-$fields-border-color: rgb(100, 100, 100)
-$error-text-clr: rgb(255, 50, 50)
+$blur-color: #0000003A
+$invisible: #00000000
+$window-color: #303030
+$window-color-grad-1: #1F1F1F
+$window-color-grad-2: #292929
+$fields-color: #4F4F4F
+$fields-border-color: #646464
+$window-box-shadow: 2px 5px 10px 0px #0000006F
+$form-field-box-shadow: 2px 5px 10px 0px #0000006F
 
-$button-color-1: rgba(79, 79, 79, 1)
-$button-color-2: rgba(59, 59, 59, 1)
-$button-hover-color-1: rgba(89, 89, 89, 1)
-$button-hover-color-2: rgba(69, 69, 69, 1)
-$button-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3)
+$text-color: #B1B1B1
+$fields-text-color: #E3E3E3
+$fields-placeholder-text-color: #AFAFAF
+$error-text-color: #FF3232
+
+$header-button-color-hover: #323232
+$header-button-color: #3232329A
+$button-color-1: #4F4F4F
+$button-color-2: #3B3B3B
+$button-hover-color-1: #595959
+$button-hover-color-2: #454545
+$button-box-shadow: 0px 5px 10px 0px #0000006F
 
 // CLASSES
 
+.form-field
+    height: 50px
+    width: 300px
+    margin: 0 !important
+    padding-inline: 16px
+    border: none
+    border-radius: $form-field-border-radius
+    outline: none
+    box-sizing: border-box
+    font-size: $form-field-font-size
+    box-shadow: $form-field-box-shadow
+    background-color: $fields-color
+    color: $fields-text-color
+
 .dark-bg
     position: absolute
-    margin: 0
     width: 100vw
     height: 100vh
-    background-color: $blur-color
+    margin: 0
     z-index: 100
+    background-color: $blur-color
     animation: fadeIn .25s
 
 .form-error
-    text-align: start
     margin: 5px 0px 7px
     padding-inline: 20px
-    color: $error-text-clr
+    text-align: start
+    color: $error-text-color
 
 .form-field:focus
     border: 1px solid $fields-border-color
 
 .form-field::placeholder
-    color: $fields-placeholder-color
+    color: $fields-placeholder-text-color
     
 .form-field:-webkit-autofill .form-field:-webkit-autofill:hover .form-field:-webkit-autofill:focus .form-field:-webkit-autofill:active
     -webkit-background-color: $fields-color !important
+        
+// MIXINS
+
+@mixin window-gradient()
+    background-color: $window-color
+    background: linear-gradient(120deg, $window-color-grad-1, $window-color-grad-2)
 
 // ANIMATIONS 
 
@@ -73,33 +101,8 @@ $button-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3)
     0%
         top: 0px
         opacity: 0
-    100%
-        top: calc(100vh / 2 - 240px)
-        opacity: 1
 
 @keyframes fadeIn
     0%
         opacity: 0        
-    100%
-        opacity: 1
-        
-// MIXINS
-
-@mixin window-gradient()
-    background-color: $header-color
-    background: linear-gradient(120deg, #292929, #202020)
-
-.form-field
-    font-size: 18px
-    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.5)
-    outline: none
-    box-sizing: border-box
-    border-radius: 0.5rem
-    background-color: $fields-color
-    color: $fields-text-color
-    border: none
-    margin: 0 !important
-    padding-inline: 16px
-    height: 50px
-    width: 300px
 

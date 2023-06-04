@@ -1,34 +1,45 @@
 @import "../../global"
 
+$sample-card-width: 740px
+$sample-card-height: 60px
+$sample-card-title-width: 400px
+$sample-card-language-width: 100px
+$sample-card-bg-color: #46464680
+$sample-card-bg-color-hover: #464646C0
+$sample-card-box-shadow-hover: 0px 0px 10px 0px #464646D0
+$sample-card-font-size: 1rem
+$sample-card-divider-color: #FFFFFF69
+
 
 .sample-card-wrapper
-    margin-block: 5px
-    width: 740px
-    height: 60px
-    background-color: rgba(70, 70, 70, 0.5)
-    border-radius: 0.5rem
     display: flex
     justify-content: space-between
     box-sizing: border-box
-    padding: 10px 20px
     align-items: center
-    transition-duration: .25s
+    width: $sample-card-width
+    height: $sample-card-height
+    padding: 10px 20px
+    margin-block: 5px
+    border-radius: $button-border-radius
     cursor: pointer
+    background-color: $sample-card-bg-color
+    transition-duration: .25s
 
 .sample-card-wrapper:hover
-    background-color: rgba(70, 70, 70, 0.70)
-    box-shadow: 0px 3px 10px 1px rgba(70, 70, 70, 0.25)
+    background-color: $sample-card-bg-color-hover
+    box-shadow: $sample-card-box-shadow-hover
 
 .sample-card-title
-    width: 400px
+    width: $sample-card-title-width
     color: $text-color
-    font-size: 1rem
+    font-size: $sample-card-font-size
 
 .sample-card-language
-    width: 100px
+    width: $sample-card-language-width
+    font-size: $sample-card-font-size
     text-align: start
     color: $text-color
-    font-size: 1rem
 
 .divider
-    border: 1px solid rgba(255, 255, 255, 0.4)
+    border: 1px solid $sample-card-divider-color
+

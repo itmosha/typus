@@ -1,5 +1,9 @@
 @import "../../global"
 
+$header-height: 50px
+$header-button-height: 30px
+$header-button-font-size: 18px
+
 // Wrappers
 
 .page
@@ -8,11 +12,10 @@
     border: 0
 
 .header-wrapper
-    height: 50px
-    padding: 16px 20px
-    
     position: relative
     display: flex
+    height: $header-height
+    padding: 16px 20px
     justify-content: space-between
 
 // Logo
@@ -22,35 +25,36 @@
     background-color: $invisible !important
 
 .logo-text
-    background-color: $invisible !important
     margin: 0
-    color: $text-color
     font-weight: 600
-    font-family: $font-exo
     text-transform: uppercase
     font-size: 32px
     line-height: 32px
+    font-family: $font-exo
+    background-color: $invisible !important
+    color: $text-color
 
 // Buttons
 
 .header-button
-    height: 30px
+    height: $header-button-height
     padding: 5px 12px 7px
     margin-left: 12px
     border: 0
-    background-color: $header-button-color
-    cursor: pointer
     border-radius: 999rem
+    background-color: $header-button-color
     transition-duration: .25s
+    cursor: pointer
     
 .header-button:hover
+    box-shadow: $button-box-shadow
     background-color: $header-button-color-hover
-    box-shadow: 0px 5px 10px 2px $header-button-color-hover
 
 .header-button-text
     margin: 0
-    font-family: $font-urbanist
-    text-transform: uppercase
-    color: $text-color
     font-weight: 500
-    font-size: 18px
+    font-size: $header-button-font-size
+    text-transform: uppercase
+    font-family: $font-urbanist
+    color: $text-color
+
