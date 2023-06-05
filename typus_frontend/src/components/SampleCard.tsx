@@ -15,7 +15,9 @@ function SampleListCard(props: Props) {
 			onClick={() => window.location.replace(`${process.env.REACT_APP_PROTOCOL}://${process.env.REACT_APP_HOSTNAME}:3000/samples/${props.sampleId}`)}
 		>
 			<h1 className='sample-card-title'>{ props.title }</h1>
-			<h2 className='sample-card-language'>{ props.language }</h2>
+			<div className='sample-card-language-wrapper'>
+				<img src={`/langs/${props.language}.svg`} className='sample-card-language' />
+			</div>
 		</div>
 	);
 }

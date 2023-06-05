@@ -3,7 +3,10 @@
 $sample-card-width: 740px
 $sample-card-height: 60px
 $sample-card-title-width: 400px
-$sample-card-language-width: 100px
+$sample-card-padding-block: 10px
+$sample-card-padding-inline: 10px
+$sample-card-language-height: calc($sample-card-height - 2 * $sample-card-padding-block)
+$sample-card-language-padding: 3px
 $sample-card-bg-color: #46464680
 $sample-card-bg-color-hover: #464646C0
 $sample-card-box-shadow-hover: 0px 0px 10px 0px #464646D0
@@ -34,11 +37,15 @@ $sample-card-divider-color: #FFFFFF69
     color: $text-color
     font-size: $sample-card-font-size
 
+.sample-card-language-wrapper
+    display: flex
+    width: 70px
+
 .sample-card-language
-    width: $sample-card-language-width
+    margin-inline: auto
+    padding: $sample-card-language-padding
+    height: calc($sample-card-language-height - 2 * $sample-card-language-padding)
     font-size: $sample-card-font-size
-    text-align: start
-    color: $text-color
 
 .divider
     border: 1px solid $sample-card-divider-color
