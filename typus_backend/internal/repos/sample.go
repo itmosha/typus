@@ -5,6 +5,7 @@ import (
 	"backend/internal/models"
 	"backend/pkg/store"
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/lib/pq"
@@ -35,7 +36,7 @@ func (r *SampleRepo) GetList() (samples []*models.Sample, err error) {
 	// Construct query and query the database
 
 	query := `
-		SELECT id, title, content, language
+		SELECT id, title, content, language, difficulty, completed_cnt
 		FROM code_samples;`
 
 	rows, err := r.store.DB.Query(query)
@@ -51,7 +52,7 @@ func (r *SampleRepo) GetList() (samples []*models.Sample, err error) {
 	for rows.Next() {
 		var sample models.Sample
 
-		if err = rows.Scan(&sample.ID, &sample.Title, pq.Array(&sample.Content), &sample.Language); err != nil {
+		if err = rows.Scan(&sample.ID, &sample.Title, pq.Array(&sample.Content), &sample.Language, &sample.Difficulty, &sample.CompletedCnt); err != nil {
 			err = errors.ErrServerError
 			return
 		}
@@ -66,14 +67,15 @@ func (r *SampleRepo) GetInstanceById(id int) (sample *models.Sample, err error) 
 
 	// Construct the query and query the database
 	query := `
-		SELECT id, title, content, language 
+		SELECT id, title, content, language, difficulty, completed_cnt
 		FROM code_samples 
+
 		WHERE id=$1;`
 	sample = &models.Sample{}
 
 	err = r.store.DB.
 		QueryRow(query, id).
-		Scan(&sample.ID, &sample.Title, pq.Array(&sample.Content), &sample.Language)
+		Scan(&sample.ID, &sample.Title, pq.Array(&sample.Content), &sample.Language, &sample.Difficulty, &sample.CompletedCnt)
 
 	// Check for errors and return if everything's fine
 	if err != nil {
@@ -93,17 +95,18 @@ func (r *SampleRepo) CreateInstance(sampleReceived *models.Sample) (sampleReturn
 	// Construct the query and query the database
 
 	query := `
-		INSERT INTO code_samples (title, content, language) 
-		VALUES ($1, $2, $3) 
-		RETURNING id, title, content, language;`
+		INSERT INTO code_samples (title, content, language, difficulty, completed_cnt) 
+		VALUES ($1, $2, $3, $4, $5) 
+		RETURNING id, title, content, language, difficulty, completed_cnt;`
 	sampleReturned = &models.Sample{}
 
 	// Get the created sample and check for errors
 	err = r.store.DB.
-		QueryRow(query, sampleReceived.Title, pq.Array(sampleReceived.Content), sampleReceived.Language).
-		Scan(&sampleReturned.ID, &sampleReturned.Title, pq.Array(&sampleReturned.Content), &sampleReturned.Language)
+		QueryRow(query, sampleReceived.Title, pq.Array(sampleReceived.Content), sampleReceived.Language, sampleReceived.Difficulty, sampleReceived.CompletedCnt).
+		Scan(&sampleReturned.ID, &sampleReturned.Title, pq.Array(&sampleReturned.Content), &sampleReturned.Language, &sampleReturned.Difficulty, &sampleReturned.CompletedCnt)
 
 	if err != nil {
+		fmt.Println(err)
 		err = errors.ErrServerError
 	}
 	return

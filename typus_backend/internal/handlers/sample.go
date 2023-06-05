@@ -27,10 +27,14 @@ func NewSampleHandler() *SampleHandler {
 
 // Add all the auth API endpoints.
 func (h *SampleHandler) Routes(g *gin.RouterGroup) {
+	// Get samples list
 	g.GET("", h.handleSamplesList)
+	// Get sample by id
 	g.GET("/:sampleId", h.handleGetSample)
+	// Create a sample
 	g.POST("", middleware.IsAuth(), middleware.IsModerator(), h.handleCreateSample)
 
+	// Options requests
 	g.OPTIONS("", handleOptions)
 	g.OPTIONS("/:sampleId", handleOptions)
 }
@@ -105,11 +109,11 @@ func (h *SampleHandler) handleCreateSample(ctx *gin.Context) {
 
 	headers.DefaultHeaders(ctx, "POST")
 
-	var regBody models.CreateSampleBody
+	var createSampleBody models.CreateSampleBody
 
 	// Read the request's body
 
-	if err := ctx.BindJSON(&regBody); err != nil {
+	if err := ctx.BindJSON(&createSampleBody); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"Error": "Could not decode the request",
 		})
@@ -118,19 +122,19 @@ func (h *SampleHandler) handleCreateSample(ctx *gin.Context) {
 
 	// Check for all necessary fields
 
-	if regBody.Title == "" {
+	if createSampleBody.Title == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"Error": "Sample title was not provided",
 		})
 		return
 	}
-	if regBody.Content == nil {
+	if createSampleBody.Content == nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"Error": "Sample content was not provided",
 		})
 		return
 	}
-	if regBody.Language == "" {
+	if createSampleBody.Language == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"Error": "Sample language was not provided",
 		})
@@ -138,9 +142,11 @@ func (h *SampleHandler) handleCreateSample(ctx *gin.Context) {
 	}
 
 	sample := &models.Sample{
-		Title:    regBody.Title,
-		Content:  regBody.Content,
-		Language: regBody.Language,
+		Title:        createSampleBody.Title,
+		Content:      createSampleBody.Content,
+		Language:     createSampleBody.Language,
+		Difficulty:   createSampleBody.Difficulty,
+		CompletedCnt: 0,
 	}
 
 	sample, err := h.UseCase.CreateSample(sample)
